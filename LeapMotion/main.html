@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="leap motion, threejs, javascript" />
+    <meta name="keywords" content="leap motion, threejs, javascript" />
+
+    <link rel="stylesheet" href="../css/w3.css" media="screen" />
+    <link rel="stylesheet" href="../css/w3-themed.css" />
+
+    <title>Leap Motion with Three.js</title>
+
+    <style>
+      #LeapContainer {
+        width: 800px;
+        height: 600px;
+      }
+    </style>
+
+    <script src="../addNavbar-formatContent.js"></script>
+  </head>
+
+  <body>
+    <div id="content" style="visibility:hidden">
+      <hr noshade size="5" align="left" />
+      <h3>Leap Motion, ThreeJS</h3>
+      <hr noshade size="5" align="left" />
+
+      <div class="w3-row-padding">
+        <div class="w3-col l3 w3-card w3-conatiner">
+          This is a Leap Motion demo application which I developed using <a href="https://www.leapmotion.com/" target="new"> Leap Motion</a> and <a href="http://threejs.org/" target="new">ThreeJs</a> JavaScript API. <br />You would need a
+          Leap Motion controller to try this application out. <br />Check the video out, if you do not have one or need help using this app.
+          <p><a href="js/leapthree.js" target="new">JavaScript Source</a></p>
+        </div>
+
+        <div class="w3-col l9">
+          <div class="w3-bar w3-theme">
+            <button class="w3-bar-item w3-button tablink w3-red" onclick="openTab(event,'app')">Application</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'video')">Video</button>
+          </div>
+
+          <div class="w3-container w3-border tabPane" id="app">
+            <div id="LeapContainer"></div>
+          </div>
+
+          <div class="w3-container w3-border tabPane" style="display:none" id="video">
+            <iframe width="800" height="600" src="http://www.youtube.com/embed/QpdMtP3kxrY" frameborder="0" allowfullscreen></iframe>
+            <br />
+          </div>
+        </div>
+
+        <script>
+          function openTab(evt, tabId) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("tabPane");
+            for (i = 0; i < x.length; i++) {
+              x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+              tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+            }
+            document.getElementById(tabId).style.display = "block";
+            evt.currentTarget.className += " w3-red";
+          }
+        </script>
+      </div>
+    </div>
+
+    <script src="js/three.min.js"></script>
+    <script src="js/leap.min.js"></script>
+    <!-- below needed by threejs -->
+    <script src="js/helvetiker_regular.typeface.js"></script>
+    <script src="js/leapthree.js"></script>
+  </body>
+</html>

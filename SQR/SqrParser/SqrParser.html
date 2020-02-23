@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>SqrParser Plugin</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20040130;135392">
+	<META NAME="CHANGED" CONTENT="20040130;22320873">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<TABLE COLS=2 WIDTH=100% BORDER=0 CELLPADDING=2 CELLSPACING=0 BGCOLOR="#ccccff" STYLE="page-break-before: always">
+	<TR VALIGN=TOP>
+		<TD>
+			<P><FONT SIZE=5><B>SqrParser</B></FONT></P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><FONT SIZE=2><B>Version 0.2.0 (March 2004)</B> <BR>By
+			Satguru P Srivastava (satgurusrivastava@yahoo.com)
+			<BR>http://home.mchsi.com/~ssatguru/</FONT>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#intro">Introduction</A>
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#req">Requirements</A>
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#install">Installation</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#start">Getting Started</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#todo">ToDo</A>
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#log">Change Log</A>
+	</P>
+	<LI><P><A HREF="#feedback">FeedBack</A>
+	</P>
+</UL>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="intro"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>Introduction</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>The &quot;SqrParser&quot; plugin provides a quick and easy way to
+navigate through and visualize the structure of your SQR pgm.
+</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="req"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>Requirements</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>The minimum requirements are
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">JRE 1.3
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">jEdit 4.1
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">ErrorList Plugin 1.2.3
+	</P>
+	<LI><P>SideKick 0.2
+	</P>
+</UL>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="install"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>Installation</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>You can install it manually or automatically.
+</P>
+<P>To install it manually
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Download the '<I><FONT COLOR="#008000">SqrParser-x.xx.jar</FONT></I>'
+	(or .tgz or .zip) file
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Extract '<I><FONT COLOR="#008000">SqrParser.jar</FONT></I>'
+	file from it using WinZip or some such program.
+	</P>
+	<LI><P>Copy the file to either <BR>'<I><FONT COLOR="#008000">jEdit/jars</FONT></I>'
+	directory <BR>or <BR>to the '<I><FONT COLOR="#008000">&lt;users home
+	directory&gt;/.jedit/jars</FONT></I>' directory. <BR>On windows the
+	home directory may be '<FONT COLOR="#008000"><I>c:\windows\profiles\&lt;userid&gt;</I>\</FONT>'
+	(on win 98) or '<FONT COLOR="#008000"><I>c:\Documents and
+	settings\&lt;userid&gt;</I>\</FONT>' (on win XP) <BR>On Linux it may
+	be '<I><FONT COLOR="#008000">/home/&lt;userid&gt;/</FONT></I>' <BR>(See
+	jEdit documentation for more help on this)
+	</P>
+</UL>
+<P>To install it automatically, use the jEdit Plugin Manager
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Go to the jEdit menu and select
+	Plugins.
+	</P>
+	<LI><P>From the drop down menu select Plugin manager and follow the
+	instructions.
+	</P>
+</UL>
+<P>In addition to SqrPlugin you will also have to install the
+SideKick plugin and optionally the ErrorList plugin.
+</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="start"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>Getting
+			Started</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>The Plugin is very simple and straight forward to use. It displays
+the structure of your sqr program in the form of a tree, within a
+window called  the &ldquo;Structure Browser&rdquo;.
+</P>
+<P>To display the &ldquo;Structure Browser&rdquo; go to jEdit Menu &gt;
+Plugins &gt; SideKick &gt; Structure Browser. <BR>Once the window is
+displayed you can move around your program by clicking different
+parts of the tree inside the window. <BR>If you click a node on the
+tree, the Structure Browser would move the cursor over to the line
+containing the procedure, the 'do' or the 'include' phrase. <BR>If
+you click a node while pressing the Shift key, the Structure browser
+would select the whole procedure , the 'do' or 'include' line
+referred to by that node. <BR>If you click a node while pressing the
+Ctrl key, the Structure browser would display the whole procedure ,
+the 'do' or 'include' line referred to by that node and hide the rest
+of the code. Clicking another node would redisplay the rest of the
+code. <BR>As you move around your code the corresponding node on the
+tree is automatically selected.
+</P>
+<P>Clicking the refresh button will force the Structure Browser to
+parse and refresh the tree. <BR>You can also set options to
+automatically parse at certain time intervals or when certain events
+occur. <BR>To do so go to jEdit 'Global Options' and set the
+appropriate properties of the SideKick Plugin
+</P>
+<P>The SideKick plugin also enable 'folding' of your program.
+'Folding' is a jEdit feature using which you can selectively display
+portion of the code. Imagine your program written on a piece of paper
+.You fold away all the parts you are not interested in and just
+unfold the ones you want to work on. Folding can be done based on
+couple of criteria. The parser result can be one of them. Go to jEdit
+Menu&gt; Utilities &gt;Global Options &gt; Editing &gt; Folding to
+use Structure Browser for folding. See jEdit help for more
+information on folding.
+</P>
+<P>The Structure browser can also be docked using jEdit 'Global
+options', docking.</P>
+<P>The SqrParser plugin works in conjunction with the SideKick
+plugin. When you open a file in the jEdit editor, the SideKick plugin
+checks to see if there is a parser plugin available for it. If it
+finds one, it calls the parser to parse the file. <BR>In the case of
+a an sqr file it calls the SqrParser to parse the file. SqrParser
+parses the file looking for heading, footings, reports, procedures
+etc and passes the result back to the SideKick plugin. <BR>The
+SideKick plugin displays the results in a tree format in the
+'Structure Browser' window.<BR>It sends any error messages, captured
+during parsing, to the Errolist Plugin. Th messages are displayed in
+the Errorlist plugin window. Clicking an error message in the
+Errorlist window highlights the erring line and moves the cursor to
+that line.
+</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="todo"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>To
+			Do</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>This is the first version of the plugin and as such has limited
+functionalities. The following are additional features being looked
+into for future releases.</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">clicking a 'include' node on the
+	tree opens the 'sqc' file in a new editor pane with it's structure
+	displayed in the structure browser window.
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">display more sqr elements like
+	select, sql, declares etc on the tree
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">right clicking a node displays a
+	contextual menu with options to display logic flow, node properties
+	etc.
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">code completion
+	</P>
+	<LI><P>contextual help
+	</P>
+</UL>
+<P>Some of the features would depend on additional enhancements to
+the SideKick plugin. Right now SideKick plugin doesn't provide for
+attaching actions and menus to the browser window. Hopefully we would
+have those options soon. <BR>I also have another plugin under
+development. This would allow one to set various SQR run time options
+and run the SQR pgm from within the jEdit environment. The log and
+lis files will be automatically displayed within jEdit.
+</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="log"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>Change log</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>Version 0.2.0 (March 2004)
+</P>
+<UL>
+	<LI><P>Compatible with the new jedit 4.2 plugin API
+	</P>
+</UL>
+<P>Version 0.10 (January 2004)
+</P>
+<UL>
+	<LI><P>First version released
+	</P>
+</UL>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=3 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=100% BGCOLOR="#7fb2ff">
+			<P ALIGN=CENTER><A NAME="feedback"></A><FONT COLOR="#ffffff"><FONT SIZE=4><B>Feedback</B></FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P>I look forward to any feedback, suggestions and bug reports. Email
+them to me at the following address <BR><EM>satgurusrivastava@yahoo.com</EM>
+</P>
+<P>Thanks <BR>Satguru Srivastava
+</P>
+</BODY>
+</HTML>

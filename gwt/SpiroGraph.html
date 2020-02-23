@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <meta name="description" content="gwt, html5, canvas, spirograph" />
+    <meta name="keywords" content="gwt, html5, canvas, spirograph" />
+
+    <link rel="stylesheet" href="../css/w3.css" media="screen" />
+    <link rel="stylesheet" href="../css/w3-themed.css" />
+
+    <title>
+      GWT
+    </title>
+
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <script type="text/javascript" language="javascript" src="spirograph/spirograph.nocache.js"></script>
+    <script src="../addNavbar-formatContent.js"></script>
+  </head>
+
+  <body>
+    <div id="content">
+      <!-- OPTIONAL: include this if you want history support -->
+      <!-- iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe> -->
+
+      <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+      <!--
+		<noscript>
+		  <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+			Your web browser must have JavaScript enabled
+			in order for this application to display correctly.
+		  </div>
+		</noscript>
+		-->
+
+      <hr noshade size="5" align="left" />
+      <h3>
+        GWT
+      </h3>
+      <hr noshade size="5" align="left" />
+
+      <div class="w3-row-padding">
+        <div class="w3-col  l4">
+          <div class="w3-container w3-card">
+            Quick and dirty Spiro grapher created using
+            <ul>
+              <li>
+                <a href="http://code.google.com/webtoolkit" target="link2">GWT (Google Web Toolkit)</a>
+              </li>
+              <li>
+                <a href="https://developer.mozilla.org/en/Canvas_tutorial" target="link2">HTML 5 CANVAS</a>
+              </li>
+            </ul>
+            <p>
+              Works only on newer browser
+            </p>
+
+            Source
+            <a href="https://github.com/ssatguru/SpiroGraph" target="_blank">
+              https://github.com/ssatguru/SpiroGraph.
+            </a>
+            <br />Warning - work in progress :)
+
+            <p>
+              Controlls
+            </p>
+            <ul>
+              <li>double click inside to stop</li>
+              <li>click and drag mouse on a spiro circle to adjust radius</li>
+              <li>click and drag mouse on the small spiro circle's draw point to adjust length</li>
+              <li>click the clear button to clear graph</li>
+              <li>click check button to check graph without the spiros</li>
+              <li>double click inside to start again.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="w3-col  l5">
+          <div id="canvas"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

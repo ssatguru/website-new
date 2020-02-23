@@ -1,0 +1,625 @@
+/***********************************************************************/
+ class Toc extends Applet implements AdjustmentListener Binary
+/***********************************************************************/
+    ac=AppletContext
+    Margin=10
+    xo = 0
+    yo = 0 
+
+    vsb = ScrollBar
+    hsb = ScrollBar
+
+    t = Rexx "UnKnown"
+    dt = Rexx "UnKnown"
+
+    TopicCount = 0
+    dcount = 0
+    ContentFrameId = ""
+
+    bg = Color
+    fg = Color
+
+    gm = Graphics
+    memImage  = Image
+    maxWidth  = int 0
+    maxLength = int
+
+    f = Font
+    fm = FontMetrics
+    step = 0
+
+    c2 = Toc.TocCanvas
+    c1 = Toc.TocPanel
+
+    pi = image
+    mi = image
+    pmLength = int 11
+    pmWidth  = int 11
+
+    fs = int
+
+    default_cursor = Cursor
+    hand_cursor    = Cursor(Cursor.HAND_CURSOR)
+    wait_cursor    = Cursor(Cursor.WAIT_CURSOR)
+
+--    TocTitle = String
+    TocTitle = Rexx
+    Aboutstr = Rexx
+    tclicked = 1 
+    
+--------------------------------------------------------------------------------------
+Method Init()
+--------------------------------------------------------------------------------------
+    ac=getAppletContext()
+
+--- create the plus & minus images
+ 
+    pi = createImage(pmWidth,pmLength)
+    mi = createImage(pmWidth,pmLength)
+
+    piG = pi.getGraphics()
+    miG = mi.getGraphics()
+    
+    piG.setColor(Color.white)
+    piG.fillRect(0,0,pmWidth-1,pmLength-1)
+    piG.setColor(Color.black)
+    piG.drawRect(0,0,pmWidth-1,pmLength-1)
+    piG.drawLine(pmWidth%2-3,pmLength%2,pmWidth%2+3,pmLength%2)
+    piG.drawLine(pmWidth%2,pmLength%2-3,pmWidth%2,pmLength%2+3)
+   
+    miG.setColor(Color.white)
+    miG.fillRect(0,0,pmWidth-1,pmLength-1)
+    miG.setColor(COlor.black)
+    miG.drawRect(0,0,pmWidth-1,pmLength-1)
+    miG.drawLine(pmWidth%2-3,pmLength%2,pmWidth%2+3,pmLength%2)
+
+--- set fonts name,style & size
+   
+    f = getFont() 
+    
+    fontinfo = getParameter("font")
+    if (fontinfo <> NULL) then
+    do
+       parse fontinfo fontname "," fontstyle "," fontsize
+       select
+           when (fontstyle = "PLAIN") then
+                fs = Font.PLAIN
+           when (fontstyle = "BOLD") then                       
+                fs = Font.BOLD
+           when (fontstyle = "ITALIC") then
+                fs = Font.ITALIC
+           when (fontstyle = "BOLD+ITALIC") then
+                fs = Font.BOLD | Font.ITALIC
+           otherwise
+                fs = f.getStyle()
+       end
+       setFont(Font(fontname,fs,fontsize))
+    end 
+
+    f = getFont() 
+    fm = getFontMetrics(f)
+    step = fm.getHeight()
+    if (step < pmLength) then step = pmLength
+
+--- read the table of content file
+    
+    tocfile = getParameter("tocfile")
+    if (tocfile = NULL) then 
+    do
+        say "No Toc File Specified"
+        exit
+    end
+
+    do 
+      URL0 = URL(getCodeBase(),tocfile)
+      bs = BufferedReader(InputStreamReader(URL0.openStream()))
+      i = 0
+      k = 0
+      loop forever
+        ln = bs.readLine()
+        if ln = null then leave 
+        
+        parse ln level '"' topic '"' . '"' addr '"' . '"' frameid '"'
+        if (level = "") | (topic = "") then iterate
+        i = i+1
+        if (level = "1") then
+        do
+            t[i,1] = 'd'
+            k = k+1
+            dt[k] = i
+        end
+        if (level > t[i-1,3]) then t[i-1,2] = '+' 
+        else t[i-1,2] = '.'
+
+        t[i,3] = level
+        t[i,4] = topic.changestr('&quot;','"')
+        if addr<> "" then t[i,5] = addr 
+        if frameid<> "" then t[i,6] = frameid
+        len = fm.stringWidth(topic)+20*level+pmWidth+5
+        if (len > maxWidth) then maxWidth = len
+      end
+      t[i,2] = '.'
+      
+    catch IOException
+      say "Problem Reading TOC File"
+      exit
+    end
+
+    TopicCount = i
+    dcount = k 
+    maxLength = step*TopicCount
+
+--  read the content frameid
+    ContentFrameId=getParameter("ContentFrameId")
+    if (ContentFrameId = NULL) then ContentFrameId = "Content"
+ 
+--  create the memory image for double buffering
+     
+    memImage = createImage(maxWidth,maxLength)
+    gm = memImage.getGraphics()
+
+--  set the background and foreground colors
+
+    r = int
+    g = int
+    b = int
+    bgColor = getParameter("background")
+    if (bgColor = NULL) then
+        bg = getBackground()
+    else
+    do
+       parse bgColor r "," g "," b
+       bg = Color(r,g,b)
+       setBackground(bg)
+    end
+
+    fgColor = getParameter("foreground")
+    if (fgColor = NULL) then
+        fg = getForeground()
+    else
+    do
+       parse fgColor r "," g "," b
+       fg = Color(r,g,b)
+       setForeground(fg)
+    end
+
+--- set the TOC title
+    
+    TocTitle  =  getParameter("Title")
+    if TocTitle = NULL then TocTitle = "TABLE OF CONTENTS"
+    else TocTitle = TocTitle.changestr('&quot;','"')
+    default_cursor = getCursor()
+
+--- get the string for about box
+    Aboutstr = getParameter("About")
+    if Aboutstr = NULL then Aboutstr = "" 
+    else
+    do 
+        Aboutstr = Aboutstr.changestr('&lf;','\n')
+        Aboutstr = Aboutstr.changestr('&quot;','"')
+    end
+
+--- add a panel to display the title, a canvas to display the topics,
+---     a vertical scrollbar, a horizontal scroll bar
+
+    setLayout(BorderLayout()) 
+
+    --- add panel
+
+    c1 = TocPanel()
+    c1.setLayout(NULL)
+    c1.setSize(getSize().Width,3*step)
+    add(c1,BorderLayout.NORTH)
+
+    --- add canvas     
+
+    c2 = TocCanvas()
+    add(c2,BorderLayout.CENTER)
+
+    --- add scrollbars
+
+    vsb = Scrollbar(Scrollbar.VERTICAL)
+    add(vsb,BorderLayout.EAST)
+    vsb.addAdjustmentListener(this)
+    vsb.setUnitIncrement(step)
+   
+
+    hsb = Scrollbar(Scrollbar.HORIZONTAL)
+    add(hsb,BorderLayout.SOUTH)
+    hsb.addAdjustmentListener(this)
+
+--------------------------------------------------------------------------------------
+method stop()
+--------------------------------------------------------------------------------------
+    if (c1.AboutBox <> NULL) then c1.AboutBox.dispose()
+
+--------------------------------------------------------------------------------------
+method adjustmentValueChanged(e = AdjustmentEvent)   
+--------------------------------------------------------------------------------------   	
+      ao =  e.getAdjustable()
+
+      if (ao.getOrientation() = Adjustable.HORIZONTAL) then
+         xo = ao.getValue()
+      else
+         yo = ao.getValue()
+
+      c2.repaint()
+
+/***********************************************************************/    
+Class Toc.TocCanvas dependent adapter extends Canvas implements MouseListener, MouseMotionListener  
+/***********************************************************************/    
+    
+    ac = parent.ac
+    Margin=parent.Margin
+
+    memImage = Image
+    URL0 = URL
+    
+    pi = parent.pi
+    mi = parent.mi 
+    pmWidth = parent.pmWidth
+    pmLength = parent.pmLength
+
+    t = parent.t
+    TopicCount = parent.TopicCount
+    ContentFrameId = parent.ContentFrameId
+
+    dt = parent.dt
+    fm = parent.fm
+    step = parent.step
+    item = 0
+    itemcount = 10
+    dcount = parent.dcount
+    maxlen = 100
+    
+   
+    gm = parent.gm
+    maxWidth = parent.maxWidth
+    maxLength = parent.maxLength
+
+    fg = parent.fg
+    bg = parent.bg
+
+    default_cursor = parent.default_cursor
+    hand_cursor    = parent.hand_cursor
+    wait_cursor    = parent.wait_cursor
+
+    tclicked = 1
+    selected = "n"
+    tslec = 0
+    prev_tslec = 0 
+
+------------------------------------------------------------------------
+  method TocCanvas()
+------------------------------------------------------------------------ 
+     
+    
+    URL0 = parent.getCodeBase()
+
+    addMouseListener(this)
+    addMouseMotionListener(this)
+ 
+--------------------------------------------------------------------------------------
+ method update(g = Graphics)
+-------------------------------------------------------------------------------------- 
+      
+    if (tclicked <> 0) then
+    do
+
+        gm.setColor(bg) 
+        if (tclicked = 1) then 
+            starty = 0 
+        else
+            starty = tclicked*step 
+        gm.fillRect(0,starty,maxWidth,maxLength) 
+        gm.setColor(fg) 
+
+    
+        k = tclicked
+        i = dt[k]
+        loop while (i < = TopicCount)
+            if (t[i,1] = "d") then
+            do
+                dt[k] = i
+                ds = t[i,4]
+                indent = Margin*t[i,3]
+                select
+                    when (t[i,2] = "+") then
+                        gm.drawImage(pi,indent,k*step-pmLength,this)
+                    when (t[i,2] = "-") then
+                        gm.drawImage(mi,indent,k*step-pmLength,this)
+                    otherwise
+                        nop
+                end
+                gm.drawString(ds,indent+pmWidth+5,k*step)
+                len = fm.stringWidth(ds)+indent+pmWidth+5
+                if (maxLen < len) then maxLen = len
+                if (i = tslec) then
+                do
+                    gm.drawRect(indent+pmWidth+5,(k-1)*step+fm.getDescent,fm.stringWidth(ds),step)
+                end
+                k = k+1
+            end
+            i = i+1
+        end
+        tclicked = 0
+    end
+
+    if selected = "y" then
+    do   
+         prev_dti=0
+         loop i  =  1 to dcount
+             if (dt[i] = prev_tslec) then prev_dti = i
+             if (dt[i] = tslec)      then      dti = i
+         end
+
+         if (prev_tslec<>0) & (prev_dti<>0) then
+         do
+             gm.setColor(bg)
+             indent = Margin*t[prev_tslec,3]
+             gm.drawRect(indent+pmWidth+5,(prev_dti-1)*step+fm.getDescent,fm.stringWidth(t[prev_tslec,4]),step)
+         end
+
+         gm.setColor(fg)
+         indent = Margin*t[tslec,3]
+         gm.drawRect(indent+pmWidth+5,(dti-1)*step+fm.getDescent,fm.stringWidth(t[tslec,4]),step)
+
+         selected = "n"
+
+    end
+ 
+    h = step*dcount
+    w = maxLen
+           
+    aSize = getSize()
+
+    VBubbleLength =  aSize.Height
+    HBubbleLength =  aSize.Width
+
+    if (VbubbleLength > =  h) & (parent.yo > 0) then h = VBubbleLength+parent.yo
+    if (HBubbleLength > =  w) & (parent.xo > 0) then w = HBubbleLength+parent.xo
+ 
+    parent.vsb.setValues(parent.yo,VBubbleLength,0,h)
+    parent.vsb.setBlockIncrement(VBubbleLength)
+    parent.hsb.setValues(parent.xo,HBubbleLength,0,w) 
+      
+    g.drawImage(parent.memImage,parent.xo*-1,parent.yo*-1,this) 
+      
+--------------------------------------------------------------------------------------
+method paint(g = Graphics)
+--------------------------------------------------------------------------------------
+    update(g)    
+
+--------------------------------------------------------------------------------------
+method mouseMoved(e = MouseEvent)
+--------------------------------------------------------------------------------------
+   item_number  =  ((e.getY()+parent.yo) % step) +1
+   if (item_number > dcount) then
+   do
+     setCursor(default_cursor)
+     return
+   end
+
+   k = dt[item_number]
+   indent = Margin*t[k,3]
+   if ((e.getX()+parent.xo) > (indent+pmWidth+5)) then
+   do
+       if ( (e.getX()+parent.xo) < (fm.stringWidth(t[k,4])+indent+pmWidth+5) ) then
+       do
+           setCursor(hand_cursor)
+           return
+       end
+       else 
+       do
+           setCursor(default_cursor)
+           return
+       end
+   end
+   if t[k,2] = '.' then
+   do
+       setCursor(default_cursor)
+       return
+   end
+
+   if (e.getX()+parent.xo) > indent & (e.getX()+parent.xo)< (indent+pmWidth) then
+       setCursor(hand_cursor)
+   else
+       setCursor(default_cursor)
+
+--------------------------------------------------------------------------------------
+method mousePressed(e = MouseEvent)
+--------------------------------------------------------------------------------------
+
+   item_number  =  ((e.getY()+parent.yo) % step) +1
+
+   if item_number > dcount then return
+   
+      k = dt[item_number]
+      indent = Margin*t[k,3]
+
+      if (e.getX()+parent.xo)>indent+pmWidth then
+          if (e.getX()+parent.xo) < (fm.stringWidth(t[k,4])+indent+pmWidth+5)then
+          do
+              setCursor(wait_cursor)
+              selected = "y"
+              prev_tslec = tslec
+              tslec = k
+              if (t[k,5] <> ""  ) then
+              do 
+                url2 = URL(URL0,t[k,5])
+
+                if t[k,6] = "UnKnown" then ShowIn = ContentFrameId
+                else ShowIn=t[k,6]
+
+                ac.showDocument(url2,ShowIn)
+
+              catch MalformedURLException
+                say 'bad url 2'
+              end
+              repaint()
+              setCursor(default_cursor)
+              return
+          end
+          else
+            return
+
+      if t[k,2] = '.' then return
+ 
+      if (e.getX()+parent.xo)<indent then return 
+     
+      
+      tclicked = item_number
+
+      if t[k,2] = '-' then
+      do
+         t[k,2] = '+'
+         level = t[k,3]
+         k = k+1
+         item_number = item_number+1
+         loop while level < t[k,3]
+              t[k,1] = " "
+              if t[k,2] = "-" then t[k,2] = "+"
+              k = k+1
+              if k > TopicCount then leave
+         end
+      end
+      else
+      do
+         level = t[k,3]
+         t[k,2] = '-'
+         k = k+1
+         nextlevel = t[k,3]
+         item_number = item_number+1
+         loop while level < nextlevel
+             if nextlevel-level = 1 then
+             do
+                 dt[item_number] = k
+                 t[k,1] = 'd'
+                 item_number = Item_number+1
+             end
+             k = k+1
+             if k > TopicCount then leave
+             nextlevel = t[k,3]
+         end
+       end 
+
+    loop while t[k,3] \ =  "UnKnown"
+        if t[k,1] = 'd' then
+        do
+           dt[item_number] = k
+           item_number = item_number+1
+        end
+        k = k+1
+    end
+    
+    dcount = item_number-1
+    say dcount
+    repaint()
+    
+    return   
+         
+/*******************************************************************************************/
+ class Toc.TocPanel dependent adapter Extends Panel implements ActionListener,WindowListener
+/*******************************************************************************************/
+    t = parent.t
+    Margin=parent.Margin
+    dt = parent.dt
+    status = "+"
+    pmLength = parent.pmLength
+    pmWidth = parent.pmWidth
+    step = parent.step
+    Aboutstr = parent.Aboutstr
+    AboutBox = Frame
+
+Method TocPanel()
+    super()
+    pb = Button("+")
+    mb = Button("-")
+    qb = Button("?")
+    add(pb)
+    add(mb)
+    add(qb)
+    pb.setBounds(Margin+pmWidth+5,step*3%2,20,step)
+    mb.setBounds(Margin+pmWidth+5+20+5,step*3%2,20,step)
+    qb.setBounds(Margin+pmWidth+5+20+5+20+5,step*3%2,20,step)
+    pb.addActionListener(this)
+    mb.addActionListener(this)
+    qb.addActionListener(this)
+
+method paint(g = Graphics)
+    c1Size = getSize()
+    g.drawRect(0,0,c1Size.Width-1,c1Size.Height-1) 
+    g.drawString(parent.TocTitle,Margin+pmWidth+5,step)  
+
+--------------------------------------------------------------------------------------
+method actionPerformed(e = ActionEvent)
+--------------------------------------------------------------------------------------
+   cmd  =  e.getActionCommand()
+   if cmd = '+' then
+   do
+     setCursor(parent.wait_cursor)
+     k = 1
+     loop while t[k,3] <> "UnKnown"
+          t[k,1] = 'd' 
+          if t[k,2] = '+' then t[k,2] = '-'
+          dt[k] = k
+          k = k+1
+      end
+      parent.c2.dcount = k-1
+    end
+    else
+    if cmd = "-" then
+    do
+      setCursor(parent.wait_cursor)
+      k = 1
+      i = 1
+      loop while t[k,3] <> "UnKnown"
+           if t[k,2] = '-' then t[k,2] = '+'
+           if t[k,3] = 1 then 
+           do
+              t[k,1] = 'd'
+              dt[i] = k
+              i = i+1
+           end
+           else t[k,1] = " "
+           k = k+1
+      end
+      parent.c2.dcount = i-1
+    end
+    else
+    do
+       if AboutBox = NULL then
+       do
+        AboutBox = Frame()
+        AboutBox.setSize(450,160)
+        AboutBox.setLayout(BorderLayout())
+        AboutBox.setResizable(0)
+        
+        AboutStr2=AboutStr || "\n" || "-----------------------------------------------------------\n"
+        Aboutstr2=Aboutstr2 || "Applet TOC ver 0.02 \n" 
+        
+        Aboutstr2=Aboutstr2 || "Created using NetRexx (http://www.ibm.com/Netrexx) \n"
+        Aboutstr2=Aboutstr2 || "By Satguru Srivastava (http://sites.netscape.com/ssatguru) \n"
+        AboutStr2=AboutStr2 ||  "-----------------------------------------------------------\n"
+        Textbox = TextArea(Aboutstr2, 80, 10)
+        Textbox.setEditable(0)
+        AboutBox.add(TextBox,BorderLayout.CENTER)
+        TextBox.setFont(Font("Monospaced",Font.PLAIN,12))
+        AboutBox.addWindowListener(this)
+        AboutBox.show()
+       end
+       return
+    end 
+    
+    parent.xo = 0
+    parent.yo = 0
+    parent.c2.tclicked = 1
+    parent.c2.repaint()
+    setCursor(parent.default_cursor)
+
+ method windowClosing(e = WindowEvent)
+    AboutBox.dispose
+    AboutBox = NULL
+    
+
+

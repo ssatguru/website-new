@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="dotnet, c#, unity3d, 3d, animations, virtual worlds" />
+    <meta name="keywords" content="dotnet, c#, unity3d, 3d, animations, virtual worlds" />
+
+    <link rel="stylesheet" href="../css/w3.css" media="screen" />
+    <link rel="stylesheet" href="../css/w3-themed.css" />
+
+    <title>Unity3d Island</title>
+    <script src="../addNavbar-formatContent.js"></script>
+  </head>
+  <body>
+    <div id="content" style="visibility:hidden">
+      <hr noshade size="5" />
+      <h3>Unity3D Island</h3>
+      <hr noshade size="5" />
+
+      Cobbled this together using
+      <ul>
+        <li><a href="http://unity3d.com/unity/" target="link"> Unity3D Game engine</a> for containing or assembling "game" logic (C#) and other artifacts. Also for creating some items like sea, island, trees, grass, sky etc,</li>
+        <li><a href="http://www.blender.org/" target="link">Blender</a> for creating animations and 3d structures (table, chair, shed etc)</li>
+        <li><a href="http://www.mixamo.com/" target="link">Mixamo </a> for freebie rigged characters (man, dog)</li>
+        <li>Internet for freebie audio files - hindi song, waves, dog bark, birds etc :))</li>
+      </ul>
+
+      <a href="build.html" target="link">
+        <img src="island.jpg" style="max-width: 100%;" title="click to play" />
+      </a>
+
+      <br />
+      Navigation keys
+      <ul class="footer">
+        <li>to move left, right, forward or back use left, right, up or down arrow or the "a", "d","w","s" keys</li>
+        <li>press shift with above keys to run</li>
+        <li>press and drag left mouse button to change direction or to look up or down</li>
+        <li>press and drag right mouse button to look around</li>
+        <li>use mouse scroll button to zoom in or out</li>
+        <li>use button on top right corner to go full screen</li>
+        <li>clicking some items displays a menu of things to do, The cursor changes to hand if an item is clickable (currently - dog, chair,radio, telporter)</li>
+      </ul>
+
+      <br />
+      Unity learning continues
+      <br />
+      <br />07/07/2014
+
+      <ul>
+        <li>switched to the new mecanim animation system</li>
+      </ul>
+
+      <br />01/05/2014
+      <ul>
+        <li>added camera collision detection (uses physics linecast())</li>
+      </ul>
+
+      <br />01/01/2014
+      <ul>
+        <li>upgraded project to unity 4.3</li>
+        <li>added a house and a heron</li>
+      </ul>
+
+      <br />05/09/2012
+      <ul>
+        <li>dog now moves around and barks randomly</li>
+      </ul>
+
+      <br />05/06/2012
+      <ul>
+        <li>added changes to make Avatar movement under water more realistic. Now splashes and bubbles appear and changes happens to animation, fog, ambient color etc when under water</li>
+        <li>
+          figured out how to add transparency to the Unity free "simple water". Turned out this was just a matter of adding the line "Blend SrcAlpha OneMinusSrcAlpha" to the shader file after the "Pass {" line. Adjusting the alpha channel
+          of the "Horizon" color in editor then adjusts transparency. The water looks a little better now
+        </li>
+
+        <li>added a "SUN" slider bar. This adjust the sky, the ambient color of light and the angle at which light falls on the scene. This kind of simulates movement of Sun from east to west during the day.</li>
+        <li>
+          added "teleporters". This makes moving to other part of island more easy. These shows up as semi tramsparent spheres with sparkles coming out. Clicking them gives a menu of destination. Nothing much in other part of island though.
+        </li>
+        <li>more changes to terrain</li>
+        <li>changed avatar rig to be the same as SecondLife /OpenSim. This makes it easy to reuse animations made for secondlife/opensim and my unity projects</li>
+      </ul>
+
+      <br />02/26/2011
+      <ul>
+        <li>My initial experiments with unity3D</li>
+      </ul>
+
+      <!-- begin htmlcommentbox.com -->
+      <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">HTML Comment Box</a> is loading comments...</div>
+      <link rel="stylesheet" type="text/css" href="http://www.htmlcommentbox.com/static/skins/bootstrap/twitter-bootstrap.css?v=0" />
+      <script type="text/javascript" language="javascript" id="hcb">
+        /*<!--*/ if (!window.hcb_user) {
+          hcb_user = {};
+        }
+        (function() {
+          s = document.createElement("script");
+          s.setAttribute("type", "text/javascript");
+          s.setAttribute("src", "http://www.htmlcommentbox.com/jread?page=" + escape((window.hcb_user && hcb_user.PAGE) || "" + window.location).replace("+", "%2B") + "&mod=%241%24wq1rdBcg%24S7UfPmgQnmuVmmHxrAqj41" + "&opts=478&num=10");
+          if (typeof s != "undefined") document.getElementsByTagName("head")[0].appendChild(s);
+        })(); /*-->*/
+      </script>
+      <!-- end htmlcommentbox.com -->
+    </div>
+  </body>
+</html>
