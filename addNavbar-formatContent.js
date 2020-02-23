@@ -46,7 +46,7 @@ let header =
   "<div id='navBar' class='w3-top'>" +
   "<div class='w3-card'>" +
   "			<div class='w3-bar'>" +
-  "						<a href='../home/index.html' target='_top' class='w3-bar-item w3-button'>Home</a>" +
+  "						<a href='/index.html' target='_top' class='w3-bar-item w3-button'>Home</a>" +
   "						<div class='w3-dropdown-hover '>" +
   "                 <button class='w3-button'>Unity3d &#9660;</button>" +
   "                 <div class='w3-dropdown-content w3-bar-block w3-card-4'>" +
