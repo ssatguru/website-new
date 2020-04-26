@@ -401,11 +401,18 @@ function leapIt(scene, camera, renderer, item) {
 
 function main() {
 	/*
-    var WIDTH = window.innerWidth,
+		var WIDTH = window.innerWidth,
         HEIGHT = window.innerHeight;
-      */  
+	*/
+	  
+	  var parent = window.document.getElementById('LeapContainer');
+	  var WIDTH = parent.clientWidth;
+	  var HEIGHT = WIDTH*0.75;
+
+	  /*
     var WIDTH = 800,
         HEIGHT = 600;
+		*/
 
     var scene = new THREE.Scene();
 

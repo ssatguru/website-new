@@ -3,4 +3,4 @@ CSSs downloaded from
 w3.css -> https://www.w3schools.com/lib/w3.css
 w3-themed -> copy of https://www.w3schools.com/lib/w3-theme-blue-grey.css
 
-to use different theme just download w3-theme-xxx.css and rename/copy that as w3-themed
+to use different theme just download w3-theme-xxx.css and rename/copy that as w3-themed.css
